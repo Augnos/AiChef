@@ -1,10 +1,29 @@
 ﻿@page "/"
+@layout LandingPageLayout
 
-<PageTitle>Index</PageTitle>
+<PageTitle>AI Chef - Craft your next meal</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="page">
+    <div class="pagestyle">
+        <nav class="row align-items-center">
+            <div class="col text-end me-3">
+                <a href="https://github.com/augnos/AiChef" target="_blank">About</a>
+            </div>
+        </nav>
 
-Welcome to your new app.
+        <main class="landingPage">
+            <div class="text-center">
+                <img src="images/AiChefLogoLight.png" height="300" />
+            </div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+            <div class="text-center mt-5">
+                <a href="/createmeal" class="btn btn-success btn-lg">Get Started</a>
+            </div>
+        </main>
 
+        <footer class="text-center">
+            &copy;2023 Joshua Valdez
+        </footer>
+    </div>
+
+</div>
