@@ -1,12 +1,109 @@
 ﻿@page "/createmeal"
+@using AiChef.Shared
+@using Microsoft.AspNetCore.Components.Forms;
+@using System.ComponentModel.DataAnnotations;
 
 <PageTitle>AI Chef - Create Meal</PageTitle>
 
-<div class="container mt-5">
-    <h3>Hello from CreateMeal</h3>
+<div class="container mt-5 h-100">
+
+    <div class="row">
+        <div class="col">
+            <h1>Create Meal</h1>
+            <EditForm EditContext="@editcontext">
+                <div class="row gy-2">
+                    <div class="col-12">
+                        <label class="form-label">Meal Time:</label>
+                        <InputSelect @bind-Value="meal.mealtime" class="form-select">
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                            <option value="Dessert">Dessert</option>
+                        </InputSelect>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Ingredient</label>
+                        <InputText placeholder="Add Ingredient" maxlength="30" @bind-Value="meal.ingredient" class="form-control mb-2" />
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-outline-success" @onclick="AddIngredient">Add</button>
+                        <button class="btn btn-outline-danger" @onclick="RemoveAll">Clear</button>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Ingredients</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ingredients)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Description
+                                            </td>
+                                            <td class="text-end pe-3">
+                                                <button class="btn btn-outline-danger" @onclick="() => RemoveIngredient(item.Id)"><i class="bi bi-trash-fill" /></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-success rounded">Generate</button>
+                    </div>
+                </div>
+
+            </EditForm>
+        </div>
+    </div>
+
 </div>
 
 @code {
+    private EditContext? editcontext;
+    private List<Ingredient> ingredients = new List<Ingredient>();
 
+    // meal: Meal instance used in form
+    private Meal meal = new();
+
+    protected override void OnInitialized()
+    {
+        editcontext = new(meal);
+    }
+
+    private class Meal
+    {
+        public string? mealtime { get; set; }
+        public string? ingredient { get; set; }
+    }
+
+    // Methods
+    private void AddIngredient()
+    {
+        if (!string.IsNullOrEmpty(meal.ingredient))
+        {
+            ingredients.Add(new Ingredient()
+            {
+                Id = Guid.NewGuid(),
+                Description = meal.ingredient
+            }
+            );
+            meal.ingredient = ""; // clears ingredient input description
+        }
+    }
+
+    private void RemoveAll()
+    {
+        ingredients.Clear();
+    }
+
+    private void RemoveIngredient(Guid id)
+    {
+        ingredients.Remove(ingredients.First(x => x.Id == id));
+    }
 }
-
