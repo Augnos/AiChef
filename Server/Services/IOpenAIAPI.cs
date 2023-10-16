@@ -1,5 +1,5 @@
 ﻿using System;
-using AiChef.Shared
+using AiChef.Shared;
 namespace AiChef.Server.Services
 {
 	public interface IOpenAIAPI

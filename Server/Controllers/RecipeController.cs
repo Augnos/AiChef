@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AiChef.Shared;
 using AiChef.Server.Data;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using AiChef.Server.Services;
+using AiChef.Shared;
+using Microsoft.AspNetCore.Http;
 
 namespace AiChef.Server.Controllers
 {
@@ -10,10 +10,31 @@ namespace AiChef.Server.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
+        private readonly IOpenAIAPI _openAIservice;
+
+        public RecipeController(IOpenAIAPI openAIservice)
+        {
+            _openAIservice = openAIservice;
+        }
+
         [HttpPost, Route("GetRecipeIdeas")]
         public async Task<ActionResult<List<Idea>>> GetRecipeIdeas(RecipeParms recipeParms)
         {
-            return SampleData.RecipeIdeas;
+            string mealtime = recipeParms.MealTime;
+            List<string> ingredients = recipeParms.Ingredients
+                                                  .Where(x => !string.IsNullOrEmpty(x.Description))
+                                                  .Select(x => x.Description!)
+                                                  .ToList();
+
+            if (string.IsNullOrEmpty(mealtime))
+            {
+                mealtime = "Breakfast";
+            }
+
+            var ideas = await _openAIservice.CreateRecipeIdeas(mealtime, ingredients);
+
+            return ideas;
+            //return SampleData.RecipeIdeas;
         }
     }
 }
