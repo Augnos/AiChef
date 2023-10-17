@@ -63,6 +63,53 @@ namespace AiChef.Server.Services
             }
         };
 
+        private static ChatFunction.Parameter _recipeParameter = new()
+        {
+            Type = "object",
+            Description = "The recipe to display",
+            Required = new[] { "title", "ingredients", "instructions", "summary" },
+            Properties = new
+            {
+                Title = new
+                {
+                    Type = "string",
+                    Description = "The title of the recipe to display",
+                },
+                Ingredients = new
+                {
+                    Type = "array",
+                    Description = "An array of all the ingredients mentioned in the recipe instructions",
+                    Items = new { Type = "string" }
+                },
+                Instructions = new
+                {
+                    Type = "array",
+                    Description = "An array of each step for cooking this recipe",
+                    Items = new { Type = "string" }
+                },
+                Summary = new
+                {
+                    Type = "string",
+                    Description = "A summary description of what this recipe creates",
+                },
+            },
+        };
+
+        private static ChatFunction _recipeFunction = new()
+        {
+            Name = "DisplayRecipe",
+            Description = "Displays the recipe from the parameter to the user",
+            Parameters = new
+            {
+                Type = "object",
+                Properties = new
+                {
+                    Data = _recipeParameter
+                },
+            }
+        };
+
+
         public OpenAIService(IConfiguration configuration)
         {
 
@@ -123,7 +170,7 @@ namespace AiChef.Server.Services
 
             ChatResponse? response = await httpResponse.Content.ReadFromJsonAsync<ChatResponse>();
 
-            //get the first message in teh function call
+            // get the first message in the function call
             ChatFunctionResponse? functionResponse = response.Choices?
                                                     .FirstOrDefault(m => m.Message?.FunctionCall is not null)?
                                                     .Message?
@@ -149,6 +196,55 @@ namespace AiChef.Server.Services
             }
 
             return ideasResult?.Data ?? new List<Idea>();
+        }
+
+        public async Task<Recipe?> CreateRecipe(string title, List<string> ingredients)
+        {
+            string url = $"{_baseUrl}chat/completions";
+            string systemPrompt = "You are a world-renowned chef. Create the recipe with ingredients, instructions, and a summary";
+            string userPrompt = $"Create a {title} recipe.";
+
+            ChatMessage userMessage = new()
+            {
+                Role = "user",
+                Content = $"{systemPrompt} {userPrompt}"
+            };
+
+            ChatRequest request = new()
+            {
+                Model = "gpt-3.5-turbo-0613",
+                Messages = new[] { userMessage },
+                Functions = new[] { _recipeFunction },
+                FunctionCall = new { Name = _recipeFunction.Name }
+            };
+
+            HttpResponseMessage httpResponse = await _httpClient.PostAsJsonAsync(url, request, _jsonOptions);
+
+            ChatResponse? response = await httpResponse.Content.ReadFromJsonAsync<ChatResponse?>();
+
+            ChatFunctionResponse? functionResponse = response?.Choices?
+                                                              .FirstOrDefault(m => m.Message?.FunctionCall is not null)?
+                                                              .Message?
+                                                              .FunctionCall;
+            Result<Recipe>? recipe = new();
+
+            if (functionResponse? .Arguments is not null)
+            {
+                try
+                {
+                    recipe = JsonSerializer.Deserialize<Result<Recipe>>(functionResponse.Arguments, _jsonOptions);
+                }
+                catch (Exception ex)
+                {
+                    recipe = new()
+                    {
+                        Exception = ex,
+                        ErrorMessage = await httpResponse.Content.ReadAsStringAsync()
+                    };
+                }
+            }
+
+            return recipe?.Data;
         }
     }
 }
