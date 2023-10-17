@@ -24,12 +24,12 @@ namespace AiChef.Server.Data
                 description = "Classic snickerdoodle cookies. The secret ingredient is cream of tartar!"
             },
             new Idea {
-                index = 2,
+                index = 3,
                 title = "Sugar Cookies",
                 description = "A sugar cookie is a cookie with the main ingredients being sugar, flour, butter, eggs, vanilla, and either baking powder or baking soda."
             },
             new Idea {
-                index = 2,
+                index = 4,
                 title = "Ginger Snaps",
                 description = "Ginger snaps are a classic favorite. With just a few ingredients and even fewer steps this recipe for fabulous, spicy cookies is truly a snap to make."
             },

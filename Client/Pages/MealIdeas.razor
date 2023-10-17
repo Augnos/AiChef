@@ -9,13 +9,13 @@
     <div class="container">
         <h3 class="mt-5">Pick a meal to make</h3>
         <div class="list-group">
-            @foreach (var item in ideas)
+            @foreach (var idea in ideas)
             {
-                <button class="list-group-item list-group-item-action list-group-item-success p-2">
+                <button @onclick="() => GetRecipe(idea.index)  " class="list-group-item list-group-item-action list-group-item-success p-2">
                     <div class="d-flex w-100 justify-content-sm-between">
-                        <h2 class="mb-1 fw-bold">@item.title</h2>
+                        <h2 class="mb-1 fw-bold">@idea.title</h2>
                     </div>
-                    <p class="mb-1">@item.description</p>
+                    <p class="mb-1">@idea.description</p>
                 </button>
             }
         </div>
@@ -90,5 +90,12 @@ else
             Console.WriteLine("Error: could not fetch recipe ideas");
         }
     }
+
+    private void GetRecipe(int index)
+    {
+        navigationManager.NavigateTo($"/mealrecipe/{index}");
+    }
+
+
 }
 
