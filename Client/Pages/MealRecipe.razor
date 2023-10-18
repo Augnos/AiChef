@@ -7,7 +7,6 @@
 
 @if (loaded == true)
 {
-
     <div class="container mt-5 h-100">
         <div class="d-flex flex-column flex-lg-row justify-content-start">
             <div class="text-center text-lg-start">
@@ -25,9 +24,9 @@
                 <h2>Ingredients</h2>
                 <ul>
                     @foreach (var ingredient in recipe.ingredients)
-                        {
-                            <li>@ingredient</li>
-                        }
+                    {
+                        <li>@ingredient</li>
+                    }
                 </ul>
             </div>
 
@@ -45,12 +44,8 @@
 }
 else
 {
-    <div class="container">
-        <p>Loading...</p>
-    </div>
+    <ChefSpinner />
 }
-
-
 
 @code {
     [CascadingParameter]

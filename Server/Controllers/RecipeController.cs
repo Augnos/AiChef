@@ -85,27 +85,15 @@ namespace AiChef.Server.Controllers
              * Returns OpenAI API responses (production)
              * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-            //string mealtime = recipeParms.MealTime;
-            //List<string> ingredients = recipeParms.Ingredients
-            //                                      .Where(x => !string.IsNullOrEmpty(x.Description))
-            //                                      .Select(x => x.Description!)
-            //                                      .ToList();
-
-            //if (string.IsNullOrEmpty(mealtime))
-            //{
-            //    mealtime = "Breakfast";
-            //}
-
-            //var ideas = await _openAIservice.CreateRecipeIdeas(mealtime, ingredients);
-
-            //return ideas;
+            var recipeImage = await _openAIservice.CreateRecipeImage(title);
+            return recipeImage ?? SampleData.RecipeImage; // will return sample image if unable to generate
 
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
              * Returns sample data (development)
              * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-            return SampleData.RecipeImage;
+            //return SampleData.RecipeImage;
 
         }
     }
