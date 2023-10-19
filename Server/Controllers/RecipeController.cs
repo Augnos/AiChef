@@ -24,7 +24,7 @@ namespace AiChef.Server.Controllers
              * Returns OpenAI API responses (production)
              * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-            string mealtime = recipeParms.MealTime;
+            string? mealtime = recipeParms.MealTime;
             List<string> ingredients = recipeParms.Ingredients
                                                   .Where(x => !string.IsNullOrEmpty(x.Description))
                                                   .Select(x => x.Description!)

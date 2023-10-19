@@ -4,7 +4,7 @@
 @using System.ComponentModel.DataAnnotations;
 @inject NavigationManager navigationManager
 
-<PageTitle>AI Chef - Create Meal</PageTitle>
+<PageTitle>ChezGPT - Create Meal</PageTitle>
 
 <div class="container mt-5 h-100">
 
@@ -27,7 +27,7 @@
                         <InputText placeholder="Add Ingredient" maxlength="30" @bind-Value="meal.ingredient" class="form-control mb-2" />
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-outline-success" @onclick="AddIngredient">Add</button>
+                        <button class="btn btn-cg-outline-primary" @onclick="AddIngredient">Add</button>
                         <button class="btn btn-outline-danger" @onclick="RemoveAll">Clear</button>
                     </div>
                     <div class="col-12 mt-3">
@@ -45,8 +45,11 @@
                                             <td>
                                                 @item.Description
                                             </td>
+
                                             <td class="text-end pe-3">
-                                                <button class="btn btn-outline-danger" @onclick="() => RemoveIngredient(item.Id)"><i class="bi bi-trash-fill" /></button>
+                                                <button class="btn btn-outline-danger" @onclick="() => RemoveIngredient(item.Id)">
+                                                    <i class="bi bi-trash-fill" />
+                                                </button>
                                             </td>
                                         </tr>
                                     }
@@ -55,7 +58,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-success rounded" @onclick="HandleSubmit">Generate</button>
+                        <button class="btn btn-cg-primary rounded" @onclick="HandleSubmit">Generate</button>
                     </div>
                 </div>
 

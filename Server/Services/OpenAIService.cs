@@ -13,7 +13,8 @@ namespace AiChef.Server.Services
         private static readonly HttpClient _httpClient = new();
         private readonly JsonSerializerOptions _jsonOptions;
 
-        // build the function object so the AI will return JSON formatted object
+        // -----DO NOT REARRANGE THIS ORDER-----
+        // 1. JSON function object of a "recipe idea". To be returned by API
         private static ChatFunction.Parameter _recipeIdeaParameter = new()
         {
             // describes one Idea
@@ -40,6 +41,7 @@ namespace AiChef.Server.Services
             }
         };
 
+        // 2. ChatGPT function to get 5 recipe ideas
         private static ChatFunction _ideaFunction = new()
         {
             // describe the function we want an argument for from the AI
@@ -63,6 +65,7 @@ namespace AiChef.Server.Services
             }
         };
 
+        // 3. JSON function object of a complete recipe's parameters. To be returned by API.
         private static ChatFunction.Parameter _recipeParameter = new()
         {
             Type = "object",
@@ -95,6 +98,7 @@ namespace AiChef.Server.Services
             },
         };
 
+        // 4. ChatGPT function of a complete recipe
         private static ChatFunction _recipeFunction = new()
         {
             Name = "DisplayRecipe",
@@ -108,7 +112,6 @@ namespace AiChef.Server.Services
                 },
             }
         };
-
 
         public OpenAIService(IConfiguration configuration)
         {
@@ -171,10 +174,10 @@ namespace AiChef.Server.Services
             ChatResponse? response = await httpResponse.Content.ReadFromJsonAsync<ChatResponse>();
 
             // get the first message in the function call
-            ChatFunctionResponse? functionResponse = response.Choices?
-                                                    .FirstOrDefault(m => m.Message?.FunctionCall is not null)?
-                                                    .Message?
-                                                    .FunctionCall;
+            ChatFunctionResponse? functionResponse = response?.Choices?
+                                                              .FirstOrDefault(m => m.Message?.FunctionCall is not null)?
+                                                              .Message?
+                                                              .FunctionCall;
             Result<List<Idea>>? ideasResult = new();
 
             if (functionResponse?.Arguments is not null)
@@ -250,7 +253,7 @@ namespace AiChef.Server.Services
         public async Task<RecipeImage?> CreateRecipeImage(string recipeTitle)
         {
             string url = $"{_baseUrl}images/generations";
-            string userPrompt = $"Create a restaurant product shot for {recipeTitle}";
+            string userPrompt = $"Create a wide-angle restaurant product shot for {recipeTitle}";
 
             ImageGenerationRequest request = new()
             {
