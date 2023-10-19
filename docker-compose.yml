@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  aichef.server:
+    image: ${DOCKER_REGISTRY-}aichef
+    build:
+      context: .
+      dockerfile: Server/Dockerfile
