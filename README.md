@@ -1,6 +1,6 @@
 # ChezGPT: What's in your fridge? 🍳🤖
 
-ChezGPT is an innovative application that leverages the power of ChatGPT and DALL-E to generate creative recipe ideas from a "world-renowned chef". Simply input the ingredients you have on hand, and ChezGPT will suggest unique recipe ideas along with detailed instructions and ingredient lists.
+ChezGPT is an innovative application that leverages the power of ChatGPT and DALL-E to generate creative recipe ideas from a "world-renowned chef". Simply input the ingredients you have on hand, and ChezGPT will suggest unique recipe ideas along with detailed instructions and ingredient lists. [See it in action!](https://chezgpt.augnos.dev)
 
 ![App Screenshot](https://github.com/Augnos/ChezGPT/assets/110561217/279d6dd2-4e0d-4c99-9353-e16c08afcb5e)
 
